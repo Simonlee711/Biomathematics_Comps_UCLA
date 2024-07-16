@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage{graphicx} % Required usepackage{mathtools}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{minted}
+\usepackage{amsfonts} % Add this line to include the amsfonts package
+\usepackage{datetime} % For date if required
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode} % Part of algorithmicx package
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{arg\,min}  % The asterisk is used to place the subscript under "arg min" in display style
+
+
+\setlength\parindent{0pt}
+
+\title{Biomath 202 2022 Exam}
+\author{SIMON LEE}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{}
+
+\textbf{a.} If $\alpha_{ij} = 0$ for $i \neq j$, the equations reduce to:
+\begin{align*}
+\frac{dx_i}{dt} &= r_i x_i + \sum_{j=1}^N \alpha_{ij} x_i x_j \\
+&= r_i x_i + \alpha_{ii} x_i^2
+\end{align*}
+Since the interaction terms $\alpha_{ij}$ are zero for $i \neq j$, this means there are no interactions between species. The $\alpha_{ii}$ term represents the self-interaction of species $i$.\\
+
+\textbf{b. }To write this system of equations in matrix form in terms of the abundance vector $\mathbf{x}$:
+\begin{align*}
+\frac{d\mathbf{x}}{dt} &= \mathbf{R} \mathbf{x} + \mathbf{A} \mathbf{x} \circ \mathbf{x} \\
+\begin{bmatrix} \dot{x}_1 \\ \dot{x}_2 \\ \vdots \\ \dot{x}_N \end{bmatrix} &= \begin{bmatrix} r_1 & 0 & \cdots & 0 \\ 0 & r_2 & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots & r_N \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_N \end{bmatrix} + \begin{bmatrix} \alpha_{11} & \alpha_{12} & \cdots & \alpha_{1N} \\ \alpha_{21} & \alpha_{22} & \cdots & \alpha_{2N} \\ \vdots & \vdots & \ddots & \vdots \\ \alpha_{N1} & \alpha_{N2} & \cdots & \alpha_{NN} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_N \end{bmatrix} \circ \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_N \end{bmatrix}
+\end{align*}
+Where $\mathbf{R}$ is the diagonal matrix of growth rates, $\mathbf{A}$ is the matrix of interaction coefficients, and $\circ$ represents element-wise multiplication.\\
+
+\textbf{c.} For a system with 2 groups where group 1 benefits and group 2 loses from the interaction:
+\begin{align*}
+\frac{dx_1}{dt} &= r_1 x_1 + \alpha_{11} x_1^2 + \alpha_{12} x_1 x_2 \\
+\frac{dx_2}{dt} &= -r_2 x_2 + \alpha_{21} x_2 x_1 + \alpha_{22} x_2^2
+\end{align*}
+Where $r_1 > 0$ represents the growth rate of group 1, and $-r_2 < 0$ represents the mortality rate of group 2. We expect $\alpha_{12} > 0$ (group 1 benefits from 2) and $\alpha_{21} < 0$ (group 2 suffers from 1). The fixed points would be where $\dot{x}_1 = \dot{x}_2 = 0$. Stability depends on the eigenvalues of the Jacobian matrix evaluated at each fixed point. The $\alpha_{ii}$ terms could help stabilize by providing negative feedback if $\alpha_{ii} < 0$.\\
+
+\textbf{d.} Additive interactions: $\frac{dx_i}{dt} = r_i x_i + \sum_{j=1}^N \alpha_{ij} x_j$
+Antagonistic interactions: Some $\alpha_{ij} < 0$ 
+Synergistic interactions: $\frac{dx_i}{dt} = r_i x_i + \sum_{j=1}^N \alpha_{ij} x_i x_j + \sum_{j=1}^N \sum_{k=1}^N \beta_{ijk} x_i x_j x_k + \cdots$
+
+Antagonism or synergy would likely be determined by measuring interaction coefficients $\alpha_{ij}$ and higher-order terms $\beta_{ijk}$ etc. experimentally. A lab or field experiment varying densities of species could measure per-capita growth rates to infer these parameters.\\
+
+
+\textbf{e.} Let's construct a bound on the imaginary and real parts of the eigenvalues of matrix $A$ by combining the Gershgorin theorem and Bendixson inequality:
+
+\textbf{i.} Gershgorin theorem:
+All eigenvalues of $A$ fall within disks centered in the complex plane at $a_{ii}$ (the diagonal elements) with radius given by the sum of absolute values of the off-diagonal elements $a_{ij}$ in row $i$:
+$$ |z - a_{ii}| \leq \sum_{j \neq i} |a_{ij}| $$
+
+This bounds the complex region containing the eigenvalues.\\
+
+\textbf{ii.} Bendixson inequality: 
+The absolute value of the imaginary part of all eigenvalues of $A$ are less than or equal to the largest absolute value of the imaginary part of any eigenvalue of the anti-symmetric part of $A$ defined as:
+$$ A^a = (A - A^T)/2 $$
+where $A^T$ is the transpose.
+
+Similarly, the absolute value of the real part of all eigenvalues of $A$ are less than or equal to the largest absolute value of the real part of any eigenvalue of the symmetric part of $A$ defined as: 
+$$ A^s = (A + A^T)/2 $$
+
+\textbf{Combining these theorems:}
+\begin{enumerate}
+    \item Gershgorin disks bound the eigenvalue region in the complex plane based on the matrix elements
+    \item  Bendixson inequalities provide separate bounds on the maximum absolute values of the real and imaginary parts based on the symmetric and anti-symmetric matrix parts
+\end{enumerate}
+
+Together, these constrain the eigenvalues to fall within Gershgorin disks intersected with the strips defined by the Bendixson bounds on the real and imaginary axes. This provides informative bounds on both the real and imaginary parts of the eigenvalues without needing to explicitly compute them.
+
+Here are the answers to the questions, showing the math steps:
+
+\textbf{f.} The anti-symmetric and symmetric Gershgorin bounds combine the original Gershgorin bound with the Bendixson inequality. For the imaginary part, the anti-symmetric bound is:
+$$ |Im(\lambda_i)| \leq \max_i \sum_{j \neq i} |a_{ij}^a| = \max_i \sum_{j \neq i} |(a_{ij} - a_{ji})/2| $$
+Compared to the original Gershgorin bound on the imaginary part:
+$$ |Im(\lambda_i)| \leq \sum_{j \neq i} |a_{ij}| $$
+The anti-symmetric bound is tighter since $|a_{ij} - a_{ji}| \leq |a_{ij}| + |a_{ji}|$.
+
+For the 3 matrix types:
+\begin{itemize}
+    \item i. Symmetric: $a_{ij} = a_{ji}$, so $a_{ij}^a = 0$. The anti-symmetric bound is 0, the tightest possible.
+    \item ii. Anti-symmetric: $a_{ij} = -a_{ji}$, so the anti-symmetric bound equals the original Gershgorin bound. No improvement.
+    \item iii. Upper triangular: $a_{ij} = 0$ for $i > j$. The anti-symmetric bound is half the original bound, so it's tighter.
+\end{itemize}
+
+\textbf{g.} The original Gershgorin bound is $|\lambda_i - a_{ii}| \leq \sum_{j \neq i} |a_{ij}|$. Whether the new anti-symmetric bound is tighter depends on the matrix:
+
+\begin{itemize}
+    \item For a symmetric matrix, the anti-symmetric bound of 0 is tighter than the original bound.
+    \item For an anti-symmetric matrix, the bounds are the same.
+    \item For an upper triangular matrix, the anti-symmetric bound is tighter.
+\end{itemize}
+
+In general, the anti-symmetric bound is tighter than or equal to the original Gershgorin bound, but how much tighter depends on the degree of asymmetry in the matrix.\\
+
+\textbf{h.} The symmetric part of $A$ is $A^s = (A + A^T)/2$ and the anti-symmetric part is $A^a = (A - A^T)/2$. Adding these recovers the original matrix $A$:
+$$ A^s + A^a = (A + A^T)/2 + (A - A^T)/2 = A $$
+The eigenvalues of a matrix $M$ satisfy $(M - \lambda I)\mathbf{v} = 0$ for some eigenvector $\mathbf{v}$. For $A^s$, this means:
+$$ (A^s - \lambda I)\mathbf{v} = ((A + A^T)/2 - \lambda I)\mathbf{v} = 0 $$
+$A^s$ is symmetric, so its eigenvalues are real. Similarly, $A^a$ is anti-symmetric, so its eigenvalues are purely imaginary. The eigenvalue equation for $A$ involves both symmetric and anti-symmetric parts, giving complex eigenvalues with the real part from $A^s$ and imaginary part from $A^a$.\\
+
+\textbf{i.} The Gershgorin row-sum disk for row $i$ is centered at $a_{ii}$ with radius $\sum_{j \neq i} |a_{ij}|$. The anti-symmetric Gershgorin bound on row $i$ has radius $\sum_{j \neq i} |a_{ij}^a| = \sum_{j \neq i} |(a_{ij} - a_{ji})/2|$.
+
+Biologically, for all positive interactions ($a_{ij} > 0$), the row-sums and bounds would be larger than for all negative interactions ($a_{ij} < 0$). A mixture would lie in between.
+
+A symmetric food web would have $a_{ij} = a_{ji}$, giving row-sum $\sum_j a_{ij}$. An anti-symmetric web would have $a_{ij} = -a_{ji}$, doubling the row-sum to $\sum_j 2|a_{ij}|$. So an anti-symmetric matrix would have larger bounds than a symmetric one with the same interaction strengths.
+
+\end{document}
