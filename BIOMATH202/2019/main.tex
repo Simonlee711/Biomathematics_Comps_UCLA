@@ -1,0 +1,112 @@
+\documentclass{article}
+\usepackage{graphicx} % Required usepackage{mathtools}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{minted}
+\usepackage{amsfonts} % Add this line to include the amsfonts package
+\usepackage{datetime} % For date if required
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode} % Part of algorithmicx package
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{arg\,min}  % The asterisk is used to place the subscript under "arg min" in display style
+
+
+\setlength\parindent{0pt}
+
+\title{Biomath 202 2019 Exam}
+\author{SIMON LEE}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\textbf{a.} The SIR model equations represent the rates of change of three population groups:
+\begin{itemize}
+    \item - Susceptible (\(S\)): \(\frac{dS}{dt} = -\beta IS\)
+    \item - Infected (\(I\)): \(\frac{dI}{dt} = \beta IS - \gamma I\)
+    \item - Recovered (\(R\)): \(\frac{dR}{dt} = \gamma I\)
+\end{itemize}
+
+The total population \(N = S + I + R\). Adding the equations:
+\[\frac{dN}{dt} = \frac{dS}{dt} + \frac{dI}{dt} + \frac{dR}{dt} = -\beta IS + \beta IS - \gamma I + \gamma I = 0\]
+
+So total population is conserved.
+
+The fixed points are found by setting all derivatives to zero. This gives:
+1) \(S = N\), \(I = R = 0\) (disease-free equilibrium)  
+2) \(S^* = \frac{\gamma}{\beta}\), \(I^* = \mu(\beta N - \gamma)/(\beta\gamma)\), \(R^* = (\beta-\mu)N/\beta\), where \(\mu = \frac{\gamma}{\beta N}\) (endemic equilibrium)
+
+\(S^* = \frac{\gamma}{\beta}\) is the herd immunity threshold, below which the disease will spread.\\
+
+\textbf{b.} To incorporate vaccination at rate \(v\) and GBS deaths at rate \(\delta\):
+\[\frac{dS}{dt} = -\beta IS - vS\]
+\[\frac{dI}{dt} = \beta IS - \gamma I - \delta I\]  
+\[\frac{dR}{dt} = \gamma I + vS\]
+\[\frac{dD}{dt} = \delta I\]  (new compartment for GBS deaths)
+
+Now \(\frac{dN}{dt} = -\delta I\), so total population is not conserved due to GBS deaths.
+
+As \(t \rightarrow \infty\), the system will approach an equilibrium with \(I = 0\) and \(S = \frac{\gamma+\delta}{\beta+v}\).\\
+
+\textbf{c.} Let \(p\) be the frequency of the GBS allele, \(q=1-p\) the normal allele frequency. Assuming HWE, the mean fitness is:
+\[\bar{w} = p^2 (1-s) + 2pq + q^2\], where \(s=0.1\) is the selection coefficient.  
+
+The variance of \(p\) is \(V(p) = 2pq\), maximized at \(p=0.5\).
+
+From the equation in part b, \(\frac{I^*}{N} = \frac{\delta}{\delta+\gamma}  \Rightarrow  p = \frac{\delta}{\delta+\gamma}\), and \(V(p) = 2p(1-p)\).
+
+The strength of selection against \(p\) is:
+\[\frac{\partial \ln(\bar{w})}{\partial p} \approx -2qs = -2(1-p)s\]  
+
+By Wright's equation, the change in \(p\) per generation is:
+\[\Delta p = -V(p) \frac{\partial \ln(\bar{w})}{\partial p} = -2pq \cdot -2qs = 4pq^2s\]
+
+Since \(q \approx 1\) for a rare allele, \(\Delta p \approx 4ps\), driven more by the selection coefficient \(s=0.1\) than the variance term \(2pq<<1\). The GBS allele frequency will decrease slowly each generation.\\
+
+\textbf{d.} If the world population is 7 billion and everyone gets vaccinated, then the number of vaccinations needed is simply 7 billion. The number of generations until the GBS mutation is eliminated depends on the selection pressure against it.\\
+
+\textbf{e.} To make stochastic predictions, we can use the Wright-Fisher model. The variance in allele frequency p is $V(p) = p(1-p)/(2N_e)$, where $N_e$ is the effective population size. The selection term from part c is $$\frac{\partial \ln(\bar{w})}{\partial p} \approx -2(1-p)s$$.
+
+Putting these together, the expected change in p per generation is:
+
+$$\mathbb{E}[\Delta p] = -V(p) \frac{\partial \ln(\bar{w})}{\partial p} = -\frac{p(1-p)}{2N_e} \cdot -2(1-p)s = \frac{p(1-p)^2 s}{N_e}$$
+
+At equilibrium, $\mathbb{E}[\Delta p] = 0$, which occurs when $p=0$ (mutation eliminated) or $p=1$ (mutation fixed), assuming $s \neq 0$ and $N_e$ is finite.
+
+The time to elimination depends on the initial p and the population size $N_e$. In a very large population, drift is weak and selection dominates, so elimination would be faster than in a small population where drift is strong relative to selection.
+
+Other factors that could help the GBS allele persist include:
+\begin{itemize}
+    \item - Balancing selection (heterozygote advantage)
+    \item - Linked selection (hitchhiking with a beneficial allele)
+    \item - Population structure/migration
+    \item - Mutation-selection balance
+\end{itemize}
+
+\textbf{f.} If a genetic screen identified carriers, the SIR equations would be:
+
+$$\frac{dS}{dt} = -\beta IS - vS$$
+$$\frac{dI}{dt} = \beta IS - \gamma I$$
+$$\frac{dR}{dt} = vS + \gamma I$$
+$$\frac{dG}{dt} = -vG$$ (screened group)
+
+The total population is N = S + I + R + G, conserved since:
+$$\frac{dN}{dt} = \frac{dS}{dt} + \frac{dI}{dt} + \frac{dR}{dt} + \frac{dG}{dt} = 0$$
+
+\[
+\text{As } t \rightarrow \infty, S \rightarrow 0, I \rightarrow 0, R \rightarrow N-G, G \rightarrow Ge^{-vt}
+\]
+
+
+The fraction getting GBS depends on the initial G and vaccination rate v. It decreases exponentially, but is never driven to zero if v  $< \infty$.
+
+So in summary, while screening and vaccination could greatly reduce GBS incidence, eliminating the allele completely from the population is challenging, especially with a large starting frequency. Let me know if you have any other questions!
+
+
+\end{document}
