@@ -1,0 +1,146 @@
+\documentclass{article}
+\usepackage{graphicx} % Required usepackage{mathtools}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{minted}
+\usepackage{amsfonts} % Add this line to include the amsfonts package
+\usepackage{datetime} % For date if required
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode} % Part of algorithmicx package
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{arg\,min}  % The asterisk is used to place the subscript under "arg min" in display style
+
+
+\setlength\parindent{0pt}
+
+\title{Biomath 202 2021 Exam}
+\author{SIMON LEE}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Exam Answers}
+
+\textbf{a) (20 points)}\\
+
+The simple analytic function describing healthcare spending increases over time (Figure 1) is an exponential function:
+
+$$H(t) = H_0 e^{rt}$$
+
+where $H(t)$ is healthcare spending at time $t$, $H_0$ is initial spending, and $r$ is the growth rate.
+
+The ordinary differential equation corresponding to this is:
+
+$$\frac{dH}{dt} = rH$$
+
+This represents exponential growth, where the rate of change is proportional to the current value.
+
+Abstract processes generating these dynamics:
+\begin{enumerate}
+    \item Compound interest-like growth in healthcare costs
+    \item Technological advancements leading to more expensive treatments
+    \item Aging population requiring more healthcare services
+\end{enumerate}
+
+Hypotheses:
+\begin{enumerate}
+    \item  Inflation in healthcare costs outpaces general inflation
+    \item  Increasing life expectancy leads to more years of healthcare needs
+\end{enumerate}
+
+The slope in the semi-log plot represents the growth rate $r$. A higher slope indicates faster growth in healthcare spending.
+
+The high $R^2$ values (0.94-0.96) suggest a good fit for this exponential model.\\
+
+\textbf{b) (20 points)}\\
+
+The simple analytic function describing healthcare spending increases with population size or GDP (Figures 2 and 3) is a power law function:
+
+$$H(x) = ax^b$$
+
+where $H(x)$ is healthcare spending, $x$ is population size or GDP, $a$ is a scaling factor, and $b$ is the power law exponent.
+
+The ordinary differential equation corresponding to this is:
+
+$$\frac{dH}{dx} = abx^{b-1}$$
+
+This represents a relationship where the rate of change in healthcare spending with respect to population or GDP follows a power law.
+
+Abstract processes:
+\begin{enumerate}
+    \item Economies of scale in healthcare provision
+    \item Network effects in healthcare systems
+    \item Increasing healthcare demand with economic growth
+\end{enumerate}
+
+\textbf{Contrast with part a:}
+
+Part a describes growth over time, while part b describes scaling with population or economic size. The exponential growth in part a leads to faster absolute increases over time, while the power law in part b describes relative scaling.
+
+\textbf{Hypotheses:}
+
+\begin{enumerate}
+    \item Larger populations enable more specialized and expensive healthcare services
+    \item As GDP increases, a larger proportion is spent on healthcare (luxury good effect)
+\end{enumerate}
+
+The slope in the log-log plot represents the power law exponent $b$. A slope $>$ 1 indicates that healthcare spending grows faster than proportionally with population or GDP.
+
+The high $R^2$ values (0.94-0.98) suggest a good fit for this power law model.\\
+
+\textbf{c) (20 points)}\\
+
+For connections among hospitals:
+A scale-free network would be well-suited to represent this structure. In a scale-free network, the degree distribution follows a power law, with a few highly connected hubs (large hospitals) and many less connected nodes (smaller hospitals).
+
+For transportation networks between hospitals:
+A small-world network would be appropriate. Small-world networks have high clustering coefficients and short average path lengths, which aligns well with transportation networks that have local clusters (cities) and long-range connections (highways, train lines). \\
+
+\textbf{d) (20 points)}\\
+
+For both network structures in part c:
+
+The scale-free network of hospital connections would likely give rise to relationships more similar to part b (power law scaling). This is because the network structure itself follows a power law distribution.
+
+The small-world network of transportation connections might lead to relationships more similar to part a (exponential growth) when considering the spread of healthcare practices or resources over time. However, it could also exhibit some characteristics of part b when considering the scaling of healthcare access with population size.
+
+To distinguish between the two network types based on data:
+\begin{itemize}
+    \item Scale-free networks would show a power law distribution of connections
+    \item Small-world networks would show high clustering and short average path lengths
+\end{itemize}
+
+\textbf{e) (20 points)}\\
+
+\textbf{i. }This example is best described by neither part a nor part b. It represents a more complex dynamic where the growth rate itself changes over time. The differential equation for this could be:
+
+$$\frac{dH}{dt} = \frac{k}{t}H$$
+
+where $k$ is a constant. This is similar to the logistic growth model in ecology, but with a time-dependent growth rate.
+
+\textbf{Hypothesis:} Initial rapid expansion of healthcare systems followed by saturation as basic needs are met.
+
+\textbf{ii.} This example is best described by part b. The differential equation would be:
+
+$$\frac{dH}{dt} = kH^2$$
+
+where $k$ is a constant. This represents a feedback loop where current healthcare spending accelerates future spending growth.
+
+\textbf{Hypothesis:} Increasing healthcare complexity leads to exponentially rising costs.
+
+\textbf{f) (20 points)}
+
+To include randomness and uncertainty in the differential equations, we can add a stochastic term. For example, starting with the simple exponential growth model:
+
+$$dH = rH dt + \sigma H dW$$
+
+where $dW$ represents a Wiener process (Brownian motion), and $\sigma$ is the volatility parameter.
+
+This is a geometric Brownian motion model, which we covered in class. It's appropriate because it maintains the proportional growth structure while adding random fluctuations. The magnitude of these fluctuations scales with the current value of $H$, which is realistic for many economic processes.
+
+\end{document}
