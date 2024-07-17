@@ -1,0 +1,292 @@
+\documentclass{article}
+\usepackage{graphicx} % Required usepackage{mathtools}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{minted}
+\usepackage{amsfonts} % Add this line to include the amsfonts package
+\usepackage{datetime} % For date if required
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode} % Part of algorithmicx package
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{arg\,min}  % The asterisk is used to place the subscript under "arg min" in display style
+
+
+\setlength\parindent{0pt}
+
+\title{Biomath 202 2013 Exam}
+\author{SIMON LEE}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Answer}
+
+\subsection{Question 1}
+
+1) First, let's express the replicator equation for $p_A$ in terms of just $p_A$ and $\Delta\pi = \pi_A - \pi_B$:
+
+\begin{align*}
+\frac{dp_A}{dt} &= p_A(\pi_A - \bar{\pi}) \\
+&= p_A(\pi_A - (p_A\pi_A + p_B\pi_B)) \\
+&= p_A(\pi_A - (p_A\pi_A + (1-p_A)\pi_B)) \quad \text{(since $p_A + p_B = 1$)} \\
+&= p_A(\pi_A - p_A\pi_A - \pi_B + p_A\pi_B) \\
+&= p_A((1-p_A)\pi_A - (1-p_A)\pi_B) \\
+&= p_A(1-p_A)(\pi_A - \pi_B) \\
+&= p_A(1-p_A)\Delta\pi
+\end{align*}
+
+2) The analogous equation for $p_B$ can be derived similarly:
+
+\begin{align*}
+\frac{dp_B}{dt} &= p_B(\pi_B - \bar{\pi}) \\
+&= p_B(\pi_B - (p_A\pi_A + p_B\pi_B)) \\
+&= p_B(\pi_B - ((1-p_B)\pi_A + p_B\pi_B)) \\
+&= p_B(\pi_B - \pi_A + p_B\pi_A - p_B\pi_B) \\
+&= p_B((1-p_B)\pi_B - (1-p_B)\pi_A) \\
+&= p_B(1-p_B)(\pi_B - \pi_A) \\
+&= -p_B(1-p_B)\Delta\pi
+\end{align*}
+
+3) For the case of $k$ different types (A, B, C, ..., k) of individuals, the replicator equation for type $i$ would be:
+
+\[ \frac{dp_i}{dt} = p_i(\pi_i - \bar{\pi}) \]
+
+where $\bar{\pi} = \sum_{j=1}^k p_j\pi_j$ is the mean payoff for the whole population.
+
+4) When $k > 2$, the replicator equation for $p_A$ cannot be simplified to involve only $p_A$ and $\Delta\pi = \pi_A - \pi_B$. This is because:
+
+\begin{align*}
+\frac{dp_A}{dt} &= p_A(\pi_A - \bar{\pi}) \\
+&= p_A(\pi_A - (p_A\pi_A + p_B\pi_B + \sum_{i \neq A,B} p_i\pi_i)) \\
+\end{align*}
+
+The term $\sum_{i \neq A,B} p_i\pi_i$ cannot be expressed in terms of just $p_A$ and $\Delta\pi$ when there are more than two types of individuals. Therefore, the simplification is not possible for $k > 2$.
+
+\subsection{Question 2:}
+Let's derive Wright's equation for a two-state system (k=2) and discuss its similarities and differences with the population genetics derivation. I'll use LaTeX to show all mathematical steps.
+
+2. Deriving Wright's equation:
+
+Starting from the replicator equation we derived earlier:
+
+\[ \frac{dp_A}{dt} = p_A(1-p_A)\Delta\pi \]
+
+Where $\Delta\pi = \pi_A - \pi_B$.
+
+To derive Wright's equation, we need to express this in terms of mean fitness $\bar{w}$. In evolutionary game theory, fitness is often equated with payoff, so we can consider $\bar{w} = \bar{\pi}$.
+
+\begin{align*}
+\bar{w} &= p_A\pi_A + (1-p_A)\pi_B \\
+\frac{\partial \bar{w}}{\partial p_A} &= \pi_A - \pi_B = \Delta\pi
+\end{align*}
+
+Now, let's consider the change in $p_A$ over one generation:
+
+\begin{align*}
+\Delta p_A &= p_{A,t+1} - p_{A,t} \\
+&\approx \frac{dp_A}{dt} \quad \text{(for small time steps)}\\
+&= p_A(1-p_A)\Delta\pi \\
+&= p_A(1-p_A)\frac{\partial \bar{w}}{\partial p_A}
+\end{align*}
+
+This is Wright's equation for a two-state system:
+
+\[ \Delta p_A = p_A(1-p_A)\frac{\partial \ln \bar{w}}{\partial p_A} \]
+
+Note that we've used $\frac{\partial \ln \bar{w}}{\partial p_A}$ instead of $\frac{\partial \bar{w}}{\partial p_A}$ because:
+
+\[ \frac{\partial \ln \bar{w}}{\partial p_A} = \frac{1}{\bar{w}}\frac{\partial \bar{w}}{\partial p_A} \]
+
+And in the context of relative fitness, we can consider $\bar{w} = 1$, making these expressions equivalent.
+
+Similarities with population genetics derivation:
+\begin{enumerate}
+    \item Both involve changes in allele/type frequencies over time.
+    \item Both consider fitness differences as driving forces of evolution.
+    \item The basic structure of $p(1-p)$ multiplied by a fitness term is present in both.
+\end{enumerate}
+
+Differences from population genetics derivation:
+\begin{enumerate}
+    \item Population genetics typically involves discrete generations, while this model uses continuous time.
+    \item The population genetics model often includes separate terms for homozygotes and heterozygotes, which are not present here.
+    \item In population genetics, we often deal with specific fitness values for genotypes, while here we use a more general payoff function.
+    \item The population genetics version might include terms for mutation or migration, which are not present in this simpler model.
+    \item This model is more focused on game-theoretic interactions and payoffs, while population genetics often deals with fixed fitness values.
+\end{enumerate}
+
+The derivation here is more general and applicable to various types of interactions beyond genetic inheritance, making it useful for studying evolutionary game theory and other complex population dynamics.
+
+\subsection{Question 3}
+For the special case where \(\pi_{A \to B} = \pi_{B \to A}\), let's express the replicator equation in terms of \(\frac{\partial \bar{\pi}}{\partial p_A}\):
+From part 1, we have:
+\[
+\frac{dp_A}{dt} = p_A(1-p_A)\Delta\pi
+\]
+Now, let's calculate \(\frac{\partial \bar{\pi}}{\partial p_A}\):
+\[
+\begin{array}{rcl}
+\bar{\pi} & = & p_A\pi_A + (1-p_A)\pi_B \\
+& = & p_A(p_A\pi_{A \to A} + (1-p_A)\pi_{A \to B}) + (1-p_A)(p_A\pi_{B \to A} + (1-p_A)\pi_{B \to B}) \\
+\frac{\partial \bar{\pi}}{\partial p_A} & = & (2p_A\pi_{A \to A} + (1-2p_A)\pi_{A \to B}) - (p_A\pi_{B \to A} + (1-2p_A)\pi_{B \to B}) \\
+& = & p_A(\pi_{A \to A} - \pi_{B \to A}) + (1-p_A)(\pi_{A \to B} - \pi_{B \to B}) \\
+& = & \Delta\pi \quad \text{(given that \(\pi_{A \to B} = \pi_{B \to A}\))}
+\end{array}
+\]
+
+Therefore, the replicator equation can be expressed as:
+\[
+\frac{dp_A}{dt} = p_A(1-p_A)\frac{\partial \bar{\pi}}{\partial p_A}
+\]
+Comparison to Wright's equation:
+This form is identical to Wright's equation derived in part 2:
+\[
+\Delta p_A = p_A(1-p_A)\frac{\partial \ln \bar{w}}{\partial p_A}
+\]
+This implies that \(\bar{\pi}\) and \(\ln \bar{w}\) are equivalent in this context. It suggests that the average payoff \(\bar{\pi}\) is directly related to the logarithm of average fitness \(\ln \bar{w}\). This aligns with the exponential fitness definition from class, where fitness is often defined as \(w = e^{\pi}\), making \(\ln w = \pi\).
+
+\subsection{Question 4}
+a) Expression for \(\Delta\pi\):
+From the interaction matrix:
+\[
+I = \begin{bmatrix} b-c & -c \\ b & 0 \end{bmatrix}
+\]
+We can calculate \(\Delta\pi\):
+\[
+\begin{array}{rcl}
+\pi_A & = & p_A(b-c) + (1-p_A)(-c) = p_A b - c \\
+\pi_B & = & p_A b + (1-p_A)(0) = p_A b \\
+\Delta\pi & = & \pi_A - \pi_B = (p_A b - c) - p_A b = -c
+\end{array}
+\]
+\(\Delta\pi = -c\), which only depends on the cost \(c\) and is independent of \(p_A\) and \(p_B\).
+b) Solving the replicator equations:
+\[
+\begin{array}{rcl}
+\frac{dp_A}{dt} & = & -cp_A(1-p_A) \\
+\frac{dp_A}{p_A(1-p_A)} & = & -c dt \\
+\int \frac{dp_A}{p_A(1-p_A)} & = & -c \int dt \\
+\ln\left(\frac{p_A}{1-p_A}\right) & = & -ct + K \\
+\frac{p_A}{1-p_A} & = & Ae^{-ct} \quad \text{where \(A = e^K\)} \\
+p_A & = & \frac{Ae^{-ct}}{1+Ae^{-ct}}
+\end{array}
+\]
+And since \(p_B = 1 - p_A\):
+\[
+p_B = \frac{1}{1+Ae^{-ct}}
+\]
+c) Behavior of the solution:
+Early times (\(t \to 0\)): \(p_A \approx \frac{A}{1+A}\), a constant determined by initial conditions.
+Late times (\(t \to \infty\)): \(p_A \to 0\) and \(p_B \to 1\)
+Population B (selfish individuals) will go to fixation, regardless of parameter values (as long as \(c > 0\)). This is because altruistic behavior (type A) always incurs a cost without direct benefit to itself in this model.
+
+\subsection{Question 5}
+a) Modified interaction matrix:
+\[
+I = \begin{bmatrix} b-c & -c+rb_k \\ b & 0 \end{bmatrix}
+\]
+b) \(\Delta\pi\) for this case:
+\[
+\begin{array}{rcl}
+\pi_A & = & p_A(b-c) + (1-p_A)(-c+rb_k) = p_A b - c + (1-p_A)rb_k \\
+\pi_B & = & p_A b + (1-p_A)(0) = p_A b \\
+\Delta\pi & = & \pi_A - \pi_B = -c + (1-p_A)rb_k
+\end{array}
+\]
+c) Inequality for \(\Delta\pi\) to be positive or negative:
+\(\Delta\pi > 0\) when:
+\[
+-c + (1-p_A)rb_k > 0
+\]
+\[
+rb_k > \frac{c}{1-p_A}
+\]
+This is a version of Hamilton's inequality. For \(\Delta\pi\) to be positive (favoring altruism), the product of relatedness (\(r\)) and indirect benefit (\(b_k\)) must exceed the cost (\(c\)) divided by the proportion of non-A individuals.
+d) Effect on trajectories:
+If \(\Delta\pi > 0\), \(dp_A/dt > 0\), and the proportion of altruists (type A) will increase over time.
+If \(\Delta\pi < 0\), \(dp_A/dt < 0\), and the proportion of altruists will decrease.
+If \(\Delta\pi = 0\), there will be a stable equilibrium where both types coexist.
+The trajectories will now depend on the values of \(r, b_k,\) and \(c\), potentially allowing for the evolution and maintenance of altruism under certain conditions, unlike in the previous model where selfish behavior always won out.
+
+
+\subsection{Question 6}
+
+Adding white noise \(\eta(t)\) to the replicator equations from part 1:
+
+\[
+\frac{dp_A}{dt} = p_A(1-p_A)\Delta\pi + \eta(t)
+\]
+
+This can be considered a Langevin equation. Here's why:
+
+\begin{enumerate}
+\item It contains a deterministic part: \(p_A(1-p_A)\Delta\pi\)
+\item It includes a stochastic term: \(\eta(t)\), which represents random fluctuations
+\end{enumerate}
+
+The general form of the corresponding Fokker-Planck equation for the probability distribution \(P(p_A, t)\) is:
+
+\[
+\frac{\partial P}{\partial t} = -\frac{\partial}{\partial p_A}[A(p_A)P] + \frac{1}{2}\frac{\partial^2}{\partial p_A^2}[B(p_A)P]
+\]
+
+Where:
+\begin{itemize}
+\item \(A(p_A)\) is the drift term: \(A(p_A) = p_A(1-p_A)\Delta\pi\)
+\item \(B(p_A)\) is the diffusion term, related to the intensity of the noise
+\end{itemize}
+
+For the example in part 4, where \(\Delta\pi = -c\), the Fokker-Planck equation becomes:
+
+\[
+\frac{\partial P}{\partial t} = \frac{\partial}{\partial p_A}[cp_A(1-p_A)P] + \frac{1}{2}\frac{\partial^2}{\partial p_A^2}[B(p_A)P]
+\]
+
+The equilibrium solution for this probability distribution, assuming \(B(p_A)\) is constant (say, \(B\)), is:
+
+\[
+P_{eq}(p_A) \propto \exp\left(-\frac{2c}{B}\left[p_A\ln p_A + (1-p_A)\ln(1-p_A)\right]\right)
+\]
+
+This is a beta distribution, which peaks at \(p_A = 0\), consistent with the deterministic solution where selfish individuals (type B) go to fixation.
+
+\subsection{Question 7}
+
+Based on the Itzkovic-Alon paper, the expected number of triangle motifs in a network with \(N\) nodes and \(L\) links maintained over time \(t\) can be expressed as:
+
+\[
+\text{Expected triangles} = \binom{N}{3} \int_0^t \int_0^t F(x,y) F(x,z) F(y,z) \, dx \, dy \, dz
+\]
+
+Where \(F(x,y)\) is the connectivity function representing the probability that a link formed at time \(x\) is still present at time \(y\).
+
+To modify the interaction matrix \(I\) to include this information:
+
+\begin{enumerate}
+\item Introduce a time-dependent term: \(I(t)\) instead of a static \(I\).
+\item For each entry \(I_{ij}(t)\), multiply by a factor representing the probability of a three-way interaction:
+
+\[
+I_{ij}(t) = I_{ij} \cdot P_{triangle}(t)
+\]
+
+Where \(P_{triangle}(t)\) is derived from the integral above, normalized by the total number of possible triangles:
+
+\[
+P_{triangle}(t) = \frac{\text{Expected triangles}}{\binom{N}{3}}
+\]
+
+\item This modification allows the payoffs to vary over time based on the likelihood of three-way interactions occurring.
+\item The entries of \(I(t)\) would now represent expected payoffs considering both direct interactions and the influence of potential mediators or "policing" effects.
+\item The time dependence in \(I(t)\) would make the replicator equations non-autonomous, potentially leading to more complex dynamics in the system.
+\end{enumerate}
+
+This approach incorporates the network structure and temporal aspects of interactions into the game-theoretic framework, allowing for a more nuanced analysis of complex social systems with higher-order interactions.
+
+
+\end{document}
