@@ -1,0 +1,194 @@
+\documentclass{article}
+\usepackage{graphicx} % Required usepackage{mathtools}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{minted}
+\usepackage{amsfonts} % Add this line to include the amsfonts package
+\usepackage{datetime} % For date if required
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode} % Part of algorithmicx package
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{arg\,min}  % The asterisk is used to place the subscript under "arg min" in display style
+
+
+\setlength\parindent{0pt}
+
+\title{Biomath 201 2018 Exam}
+\author{SIMON LEE}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Question 1}
+
+I will solve this problem step-by-step according to the instructions provided in the image. I'll be using LaTeX to show all the math.
+
+(a) Assuming $a_m, k, k_3 > 0$:
+
+\begin{align*}
+m(t) &= a_m(m - (v - r)) - km + k_3m^3 \\
+v(t) &= a_v(m - (v - r))
+\end{align*}
+
+(b) Linearizing about the steady states $(m(0), v(0))$:
+
+Let $m(t) = m(0) + \delta m(t)$ and $v(t) = v(0) + \delta v(t)$. Substituting:
+
+\begin{align*}
+\frac{d}{dt}(m(0) + \delta m(t)) &= a_m(m(0) + \delta m(t) - (v(0) + \delta v(t) - r)) - k(m(0) + \delta m(t)) + k_3(m(0) + \delta m(t))^3 \\
+\frac{d}{dt}(v(0) + \delta v(t)) &= a_v(m(0) + \delta m(t) - (v(0) + \delta v(t) - r))
+\end{align*}
+
+At steady state, $\frac{dm(0)}{dt} = 0$ and $\frac{dv(0)}{dt} = 0$. Neglecting higher order terms:
+
+\begin{align*}
+\frac{d(\delta m(t))}{dt} &= a_m(\delta m(t) - \delta v(t)) - k\delta m(t) + 3k_3m(0)^2\delta m(t) \\
+\frac{d(\delta v(t))}{dt} &= a_v(\delta m(t) - \delta v(t))
+\end{align*}
+
+The $(0,0)$ steady state is found by setting $m(0)=v(0)=0$. The other steady states would need to be solved for based on the parameter values.
+
+(c) If $a_m > 0$ is discontinuous:
+
+For $m > v$:
+\begin{align*}
+\frac{dm}{dt} &= a_m^+(m - (v - r)) - km + k_3m^3\\
+\frac{dv}{dt} &= a_v(m - (v - r)) 
+\end{align*}
+
+For $m < v$:
+\begin{align*}
+\frac{dm}{dt} &= a_m^-(m - (v - r)) - km + k_3m^3\\
+\frac{dv}{dt} &= a_v(m - (v - r))
+\end{align*}
+
+Stability would need to be analyzed separately in each half-plane $m>v$ and $m<v$.
+
+Overall stability depends on the eigenvalues of the linearized system matrix $\frac{d}{dm}$ in each case. If all eigenvalues have negative real part, it's stable. If any have positive real part, it's unstable. Imaginary eigenvalues indicate oscillations.
+
+The dynamics may be oscillatory in one half-plane and monotonic (stable or unstable) in the other. More cases would need to be worked out based on the specific parameters and resulting eigenvalues. The criteria would be the signs of the real parts of the eigenvalues in each half-plane.
+
+\section{Question 2}
+
+Here are the solutions using LaTeX, showing all steps:
+
+(a) Finding approximate analytic expressions for the steady-state populations $n^*_1$ and $n^*_2$:
+
+At steady state, $\frac{dn_1}{dt} = \frac{dn_2}{dt} = 0$. So:
+
+\begin{align*}
+0 &= a_1 + r_1\left(1 - \frac{N^*}{K_1}\right)n^*_1 \\
+0 &= a_2 + r_2\left(1 - \frac{N^*}{K_2}\right)n^*_2
+\end{align*}
+
+where $N^* = n^*_1 + n^*_2$ is the total steady-state population.
+
+Assuming $a_{1,2}$ and $r_{1,2}$ are $O(1)$ while $K_1, K_2 \gg 1$:
+
+\begin{align*}
+n^*_1 &\approx \frac{K_1}{r_1}\left(\frac{a_1}{K_1} + \frac{r_1}{K_1}\right) = \frac{a_1}{r_1} + 1 \\
+n^*_2 &\approx \frac{K_2}{r_2}\left(\frac{a_2}{K_2} + \frac{r_2}{K_2}\right) = \frac{a_2}{r_2} + 1
+\end{align*}
+
+To express $n^*_1$ and $n^*_2$ in terms of $N^* = n^*_1 + n^*_2$:
+
+Let $N^* = n^*_1 + n^*_2$. Then:
+
+\begin{align*}
+n^*_1 &= N^* - n^*_2 \approx N^* - \left(\frac{a_2}{r_2} + 1\right) \\
+n^*_2 &= N^* - n^*_1 \approx N^* - \left(\frac{a_1}{r_1} + 1\right)
+\end{align*}
+
+A cubic equation for $N^*$ can be found by substituting these into either steady-state equation and solving. The physical roots of $N^*$ will then give $n^*_{1,2}$.
+
+(b) Analytic approximation to $n_1(t)$ and $n_2(t)$ for small $a_{1,2}$ and initial condition $n_1(0) = n_2(0) = 0$:
+
+Assuming $r_1 = r_2 = r$ and $K_1, K_2 \gg 1$, $K_1 \neq K_2$, but $K_1/K_2 = 1 \pm \varepsilon$ where $\varepsilon \ll 1$:
+
+\begin{align*}
+\frac{dn_1}{dt} &= a_1 + r\left(1 - \frac{n_1 + n_2}{K_1}\right)n_1 \\
+\frac{dn_2}{dt} &= a_2 + r\left(1 - \frac{n_1 + n_2}{K_2}\right)n_2
+\end{align*}
+
+For small $a_{1,2}$ and initial conditions $n_1(0) = n_2(0) = 0$, we can assume $n_{1,2}$ remain small for some time. Neglecting the $n_1n_2$ terms:
+
+\begin{align*}
+\frac{dn_1}{dt} &\approx a_1 + rn_1 \\
+\frac{dn_2}{dt} &\approx a_2 + rn_2
+\end{align*}
+
+The solutions are:
+
+\begin{align*}
+n_1(t) &\approx \frac{a_1}{r}(e^{rt} - 1) \\
+n_2(t) &\approx \frac{a_2}{r}(e^{rt} - 1)
+\end{align*}
+
+These approximations will be valid for short times before the populations grow large. For longer times, the full equations would need to be solved, potentially considering different timescales.
+
+To work out the most general case, qualitatively new features could arise when $a_1 \neq a_2$ and when $r_1 \neq r_2$. The dynamics would need to be analyzed considering these possibilities.
+
+\section{Question 3}
+
+(a) Deriving the steady-state concentration field:
+
+Assume the consumption rate of nutrients by the cells is $kc(r)$, proportional ($k$ is a constant) to the nutrient concentration at position $r$ inside the clump.
+
+The steady-state (static) concentration field satisfies:
+
+\begin{align*}
+D_0\nabla^2c(\vec{r}) - kc(\vec{r}) &= 0 \quad \text{inside the clump} \\
+c(r \to \infty) &= c_\infty \quad \text{boundary condition}
+\end{align*}
+
+Recalling the form of the solutions to Kelvin's equation in 3D are $e^{\pm r/\sqrt{k/D_0}}/r$:
+
+\begin{align*}
+c(\vec{r}) &= c_\infty + Ae^{-r/\sqrt{D_0/k}}/r \\
+c(0) &= \text{finite} \implies A = 0 \\
+c(a) &= c_0 \implies c_0 = c_\infty + Ae^{-a/\sqrt{D_0/k}}/a
+\end{align*}
+
+Imposing flux conservation at $r=a$:
+
+\begin{align*}
+-D_0\frac{dc}{dr}\bigg|_{r=a^+} &= -D_1\frac{dc}{dr}\bigg|_{r=a^-} \\
+D_0\frac{c_\infty - c_0}{a} &= D_1\frac{c_0 - c(a^-)}{dr}
+\end{align*}
+
+where $dr$ is an infinitesimal thickness inside the sphere surface.
+
+(b) Defining the effective local proliferation rate:
+
+The cells can proliferate if they have access to nutrient but will die if they don't. Define the effective local proliferation rate as:
+
+\[
+g[c(\vec{r})] = 
+\begin{cases}
+    g_0(c(\vec{r}) - c_0) & \text{for } c(\vec{r}) > c_0 \\
+    0 & \text{for } c_0 \geq c(\vec{r}) > 0 \\
+    \text{negative effective growth rate} & \text{for } c(\vec{r}) \leq 0
+\end{cases}
+\]
+
+where $c_0$ is a critical nutrient above which the cells divide and grow and below which the cells die.
+
+Assuming the density of cells is constant and each cell has volume $v$, the number of cells in a spherical shell with radius $r$ and thickness $dr$ is:
+
+\[dN = 4\pi r^2v^{-1}dr\]
+
+Cells that die are quickly removed from the sphere. Assuming spherical symmetry in all quantities and processes:
+
+\begin{align*}
+\frac{d\sigma*}{dt} &= \int_0^a g[c(r)] 4\pi r^2 v^{-1}dr \\
+\sigma* &= va^*
+\end{align*}
+
+Is this clump radius stable? Hint: Assume growth or death in each spherical shell of thickness $dr$ and integrate over the entire sphere. The concentration field $c(r)$ in $g[c(r)]$ depends implicitly on $a*$.
+
+\end{document}
