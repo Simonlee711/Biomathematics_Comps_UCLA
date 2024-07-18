@@ -1,0 +1,236 @@
+\documentclass{article}
+\usepackage{graphicx} % Required usepackage{mathtools}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{minted}
+\usepackage{amsfonts} % Add this line to include the amsfonts package
+\usepackage{datetime} % For date if required
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode} % Part of algorithmicx package
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{arg\,min}  % The asterisk is used to place the subscript under "arg min" in display style
+
+
+\setlength\parindent{0pt}
+
+\title{Biomath 202 2010 Exam}
+\author{SIMON LEE}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Answers}
+
+I'll answer the questions using LaTeX formatting, showing all math steps where applicable. Let's go through each question:
+
+\textbf{a.} Prove that it is impossible to have a network of this type that has an odd number of nodes.
+
+Proof:
+Let's consider a network with $n$ nodes, where each node has exactly 3 links.
+
+\begin{enumerate}
+    \item 1) The total number of links in the network would be $3n/2$, as each link connects two nodes.
+    \item 2) For this to be a whole number, $n$ must be even.
+    \item 3) If $n$ were odd, $3n/2$ would result in a fractional number of links, which is impossible.
+\end{enumerate}
+
+Therefore, it is impossible to have a network of this type with an odd number of nodes.
+
+\textbf{b.} What are the number of subgraphs that are i) wedges, ii) triangles, and iii) squares for the example above?
+
+For the given 4-node network:
+
+\begin{itemize}
+    \item i) Wedges: A wedge is a path of length 2. In this network, there are 12 wedges.
+    \item ii) Triangles: There are 4 triangles in this network.
+    \item iii) Squares: There is 1 square in this network.
+\end{itemize}
+
+\textbf{c.} By building "ladders" of nodes as described above and completing the network via "crossovers" (analogous to the topology of the unique four-node network above), draw the simplest generalization of this type of network that has six nodes, eight nodes, and ten nodes.
+
+Here's a textual description of how these networks would look:
+
+6-node network:
+\begin{verbatim}
+*--*--*
+|  |  |
+*--*--* 
+\end{verbatim}
+
+
+8-node network:
+\begin{verbatim}
+*--*--*--*
+|  |  |  |
+*--*--*--*
+\end{verbatim}
+
+10-node network:
+\begin{verbatim}
+*--*--*--*--*
+|  |  |  |  |
+*--*--*--*--*
+\end{verbatim}
+
+\textbf{d.} What is the mean connectivity of these networks?
+
+The mean connectivity is the average number of connections per node.
+
+For all these networks, each node has exactly 3 connections.
+
+Therefore, the mean connectivity is 3 for all of these networks.
+
+\textbf{e.} For each of the "ladder" networks you constructed in c), what are the number of subgraphs that are i) wedges, ii) triangles, and iii) squares?
+
+Let's count for each network:
+
+6-node network:
+\begin{itemize}
+    \item i) Wedges: 24
+    \item ii) Triangles: 6
+    \item iii) Squares: 3
+\end{itemize}
+8-node network:
+\begin{itemize}
+    \item i) Wedges: 36
+    \item ii) Triangles: 8
+    \item iii) Squares: 5
+\end{itemize}
+
+10-node network:
+\begin{itemize}
+    \item i) Wedges: 48
+    \item ii) Triangles: 10
+    \item iii) Squares: 7
+\end{itemize}
+
+\textbf{f.} How do the number of wedges in e) compare with those expected based on Erdos-Renyi random networks or on the geometric models of Itzkovitz and Alon? How do the number of triangles and squares in e) compare with those expected based just on Erdos-Renyi random networks? Which subgraphs would be identified as potential motifs for these networks?
+
+To fully answer this question, we would need specific parameters for the Erdos-Renyi and Itzkovitz-Alon models to make precise comparisons. However, we can make some general observations:
+
+\begin{itemize}
+    \item 1) The number of wedges, triangles, and squares in our ladder networks grow linearly with the number of nodes, which is different from what we'd expect in random networks.
+    \item 2) In Erdos-Renyi random networks, we would expect the number of these subgraphs to grow much more slowly, approximately as $O(n)$, $O(n^3p^3)$, and $O(n^4p^4)$ respectively, where $n$ is the number of nodes and $p$ is the probability of an edge.
+    \item 3) The geometric models of Itzkovitz and Alon would likely predict more local structures than a purely random model, but still fewer than we observe in our ladder networks.
+    \item 4) Given the higher-than-expected frequencies, all of these subgraphs (wedges, triangles, and squares) could potentially be identified as motifs in these networks.
+\end{itemize}
+
+\textbf{g.} How do the actual numbers of wedges, triangles, and squares each scale with the size of the network (i.e., the number of nodes, N) for these ladder networks? Can you write down a power-law relationship for how any of these numbers depends on network size? If so, what is the scaling exponent?
+
+Let's analyze the scaling for each subgraph:
+
+\begin{itemize}
+    \item Wedges: The number of wedges is $12N/2 = 6N$
+    \item Triangles: The number of triangles is $N$
+    \item Squares: The number of squares is $N-3$
+\end{itemize}
+
+These can be expressed as power-law relationships:
+
+\begin{itemize}
+    \item Wedges: $W = 6N^1$
+    \item Triangles: $T = N^1$
+    \item Squares: $S = N^1 - 3$
+\end{itemize}
+
+The scaling exponent for all three relationships is 1, indicating a linear relationship with network size.
+
+\textbf{h.} What do the scaling relationships in g) say about the identification of motifs as networks get larger? That is, how do these scaling relationships compare with the scaling relationships predicted by Erdos-Renyi random networks or geometric models like Itzkovitz and Alon?
+
+The linear scaling relationships we found in g) differ significantly from what would be expected in Erdos-Renyi random networks or geometric models:
+
+1) In Erdos-Renyi networks, we would expect:
+   \begin{itemize}
+       \item - Wedges to scale as $O(N)$
+       \item - Triangles to scale as $O(N^3p^3)$
+       \item - Squares to scale as $O(N^4p^4)$
+   \end{itemize}
+
+2) Geometric models like Itzkovitz and Alon would predict scaling somewhere between random and our observed linear scaling, depending on the specific model parameters.
+
+3) The linear scaling in our ladder networks suggests that these subgraphs become increasingly overrepresented compared to random expectations as the network grows.
+
+4) This increasing overrepresentation means that wedges, triangles, and squares would be more likely to be identified as motifs in larger networks of this type.
+
+5) The consistency of this overrepresentation across network sizes suggests that these subgraphs are fundamental to the structure of these ladder networks, rather than arising by chance.
+
+i. Draw an example of a six-node network that follows the rules stated at the beginning of this test but that is not a ladder diagram (even after possible rearrangements). How many wedges, triangles, and squares are in this diagram? How do these numbers compare with those for the six-node ladder network?
+
+Here's a textual representation of a non-ladder 6-node network that follows the rules:
+
+\begin{verbatim}
+   *--*
+  /|  |\
+ / |  | \
+*--*--*--*
+\end{verbatim}
+
+In this network:
+\begin{itemize}
+    \item Wedges: 24
+    \item Triangles: 4
+    \item Squares: 3
+\end{itemize}
+
+Comparing to the 6-node ladder network:
+\begin{itemize}
+    \item - Wedges: Same (24)
+    \item - Triangles: Fewer (4 vs 6)
+    \item - Squares: Same (3)
+\end{itemize}
+
+The number of wedges and squares remains the same, but the number of triangles is reduced in this non-ladder arrangement.
+
+
+\textbf{(j)} To prove that the material must eventually return to the starting node, let's follow the steps suggested and use the concept of the dual network. We'll approach this proof systematically:
+
+1) Construct the dual network:
+   - Replace each link in the original network with a node.
+   - Connect these new nodes if their corresponding links in the original network shared a node.
+
+2) Mapping the flow:
+   - In the original network, the flow alternates between "right" and "left" at each node.
+   - In the dual network, this translates to always moving to an adjacent node.
+
+3) Analyze the dual network:
+   - The dual network is an undirected graph where each node has exactly two neighbors.
+   - This forms a simple cycle (or multiple disconnected cycles, which we can treat independently).
+
+4) Properties of flow in the dual network:
+   - Once the flow enters the cycle, it must continue in one direction indefinitely.
+   - Since the dual network is finite, the flow must eventually return to any node it passes through.
+
+5) Translating back to the original network:
+   - Returning to a node in the dual network means the flow has traversed a link in the original network in both directions.
+   - This can only happen if the flow has returned to the node at one end of this link in the original network.
+
+6) Conclusion:
+   - Since the flow must return to some node in the original network, and all nodes are equivalent in terms of the rules of flow, the flow must eventually return to the starting node.
+
+Formal proof:
+
+Let $G$ be the original network and $G'$ be its dual.
+Let $v_0$ be the starting node in $G$.
+Let $e_0$ be any edge connected to $v_0$ in $G$, and $v'_0$ be the corresponding node in $G'$.
+
+\begin{itemize}
+    \item 1) $G'$ consists of one or more simple cycles.
+    \item 2) The flow in $G'$ starting from $v'_0$ follows a path $P = (v'_0, v'_1, v'_2, ..., v'_k)$.
+    \item 3) Since $G'$ is finite, $\exists i,j : 0 \leq i < j \leq k, v'_i = v'_j$.
+    \item 4) This means the flow in $G'$ forms a cycle $C = (v'_i, v'_{i+1}, ..., v'_j = v'_i)$.
+    \item 5) In $G$, this cycle $C$ corresponds to a sequence of edges that starts and ends at the same node, say $v_r$.
+    \item 6) The flow rules in $G$ ensure that if we enter $v_r$ from one edge, we must leave through a different edge.
+    \item 7) To complete the cycle $C$ in $G'$, we must have entered and left $v_r$ through all its connected edges.
+    \item 8) This is only possible if $v_r = v_0$, as we must have used the edge corresponding to $v'_0$.
+\end{itemize}
+
+Therefore, the flow must eventually return to the starting node $v_0$ in the original network $G$.
+
+This proof demonstrates that the flow cannot get stuck in a loop that doesn't include the starting node, as any loop in the dual network corresponds to a path that returns to the starting node in the original network.
+
+\end{document}

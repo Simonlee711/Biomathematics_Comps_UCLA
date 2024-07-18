@@ -1,0 +1,364 @@
+\documentclass{article}
+\usepackage{graphicx} % Required usepackage{mathtools}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{minted}
+\usepackage{amsfonts} % Add this line to include the amsfonts package
+\usepackage{datetime} % For date if required
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode} % Part of algorithmicx package
+
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmin}{arg\,min}  % The asterisk is used to place the subscript under "arg min" in display style
+
+
+\setlength\parindent{0pt}
+
+\title{Biomath 202 2012 Exam}
+\author{SIMON LEE}
+\date{July 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Answers}
+
+\subsection{Question 1}
+
+Let's start with the equation for fitness of a population exposed to both perturbations:
+
+\[w_{xy} = w_0 + a_x x + a_y y + \epsilon_{xy} xy\]
+
+Where:
+- $w_0$ is the baseline fitness
+- $a_x$ and $a_y$ are the individual effects of perturbations x and y
+- $\epsilon_{xy}$ is the interaction term (analogous to covariance)
+
+To solve for $w_{xy}$, we consider the individual fitnesses:
+
+\[w_x = w_0 + a_x x\]
+\[w_y = w_0 + a_y y\]
+
+Now we can express $w_{xy}$ in terms of these:
+
+\[w_{xy} = w_x + w_y - w_0 + \epsilon_{xy} xy\]
+
+This is the equation that allows us to classify interactions as additive, synergistic, or antagonistic:
+
+- If $\epsilon_{xy} = 0$, the interaction is additive (no interaction)
+- If $\epsilon_{xy} > 0$, the interaction is synergistic
+- If $\epsilon_{xy} < 0$, the interaction is antagonistic
+
+\subsection{Question 2}
+
+Along the lines x=0 and y=0, the solution from problem 1 reduces to:
+
+For x=0: 
+\[w_{xy} = w_y = w_0 + a_y y\]
+
+For y=0: 
+\[w_{xy} = w_x = w_0 + a_x x\]
+
+This means that when one perturbation is absent (x=0 or y=0), the fitness is only affected by the other perturbation. The interaction term $\epsilon_{xy} xy$ becomes zero, and we're left with the linear effect of the remaining perturbation.
+
+\subsection{Question 3}
+
+For small changes dx and dy, we can express the total change in fitness as:
+
+\[dw_{xy} = \frac{\partial w_{xy}}{\partial x} dx + \frac{\partial w_{xy}}{\partial y} dy\]
+
+To find the partial derivatives:
+
+\[\frac{\partial w_{xy}}{\partial x} = a_x + \epsilon_{xy} y\]
+\[\frac{\partial w_{xy}}{\partial y} = a_y + \epsilon_{xy} x\]
+
+Substituting these back into the equation:
+
+\[dw_{xy} = (a_x + \epsilon_{xy} y) dx + (a_y + \epsilon_{xy} x) dy\]
+
+We can rewrite this in terms of the individual fitnesses and the covariance:
+
+\[dw_{xy} = \frac{\partial w_x}{\partial x} dx + \frac{\partial w_y}{\partial y} dy + \epsilon_{xy} (y dx + x dy)\]
+
+This expression includes:
+- The sum of partial derivatives of the individual fitnesses: $\frac{\partial w_x}{\partial x} dx + \frac{\partial w_y}{\partial y} dy$
+- The covariance term: $\epsilon_{xy} (y dx + x dy)$
+
+This formulation allows us to see how small changes in the perturbation values affect the overall fitness, taking into account both the individual effects and their interaction.
+
+\subsection{Question 4}
+
+Given: Cov$(w_x,w_y) = (x-cy)^p$, where c is a constant coefficient and p is an exponent.
+
+To derive an expression for $\frac{\partial w_{xy}}{\partial x}$ when there's a change dx in x but no change in y:
+
+1) Recall from the previous answer that:
+
+   $$\frac{\partial w_{xy}}{\partial x} = a_x + \epsilon_{xy} y$$
+
+2) Here, $\epsilon_{xy}$ is related to the covariance. We can express it as:
+
+   $$\epsilon_{xy} = \frac{\partial^2 w_{xy}}{\partial x \partial y} = \frac{\partial}{\partial x}(x-cy)^p$$
+
+3) Applying the chain rule:
+
+   $$\epsilon_{xy} = p(x-cy)^{p-1} \cdot \frac{\partial}{\partial x}(x-cy) = p(x-cy)^{p-1}$$
+
+4) Therefore, the expression for $\frac{\partial w_{xy}}{\partial x}$ is:
+
+   $$\frac{\partial w_{xy}}{\partial x} = a_x + p(x-cy)^{p-1}y$$
+
+Now, let's consider when the covariance term does not contribute:
+
+The covariance term doesn't contribute when $p(x-cy)^{p-1}y = 0$. This occurs when:
+
+a) $y = 0$, regardless of the values of x, c, or p.
+b) $x = cy$, making $(x-cy)^{p-1} = 0^{p-1}$, which is undefined for $p < 1$, zero for $p > 1$, and 1 for $p = 1$ (but in this case, $y$ must be zero for no contribution).
+
+This does depend on the value of p:
+\begin{itemize}
+    \item - For $p = 1$, the covariance term is constant (py) and only doesn't contribute when $y = 0$.
+    \item - For $p \neq 1$, the covariance term can be zero when either $y = 0$ or $x = cy$.
+\end{itemize}
+
+For $p = 1$, to eliminate the contribution of the covariance term with a change dy:
+
+1) The covariance term is $$y(x-cy)^0 = y$$
+
+2) To eliminate this, we need:
+
+   $$y \cdot dx + x \cdot dy = 0$$
+
+3) Solving for dy:
+
+   $$dy = -\frac{y}{x} \cdot dx$$
+
+This means that for a given change dx, you could eliminate the covariance term contribution by simultaneously changing y by $-\frac{y}{x} \cdot dx$. This creates a proportional change in y that exactly cancels out the covariance effect of the change in x.
+
+\subsection{Question 5}
+
+Given: Fitness levels monotonically decrease with perturbations x and y, and fitness cannot be negative.
+
+For a change dx (without change in y):
+
+1) Additivity: $$\frac{\partial Cov(w_x,w_y)}{\partial x} = 0, \frac{\partial w_{xy}}{\partial x} < 0$$
+
+2) Synergy: $$\frac{\partial Cov(w_x,w_y)}{\partial x} < 0,\frac{\partial w_{xy}}{\partial x} < 0$$
+
+3) Antagonism: $$\frac{\partial Cov(w_x,w_y)}{\partial x} > 0\frac{\partial w_{xy}}{\partial x} < 0$$
+
+For a change dy (without change in x):
+
+1) Additivity: $$\frac{\partial Cov(w_x,w_y)}{\partial y} = 0, \frac{\partial w_{xy}}{\partial y} < 0$$
+
+2) Synergy: $$\frac{\partial Cov(w_x,w_y)}{\partial y} < 0, \frac{\partial w_{xy}}{\partial y} < 0$$
+
+3) Antagonism: $$\frac{\partial Cov(w_x,w_y)}{\partial y} > 0, \frac{\partial w_{xy}}{\partial y} < 0$$
+
+\subsection{Question 6}
+
+For additivity, the equation from part 3 reduces to:
+
+$$dw_{xy} = \frac{\partial w_x}{\partial x} dx + \frac{\partial w_y}{\partial y} dy$$
+
+To remain on a line of constant fitness:
+
+$$dw_{xy} = 0 = \frac{\partial w_x}{\partial x} dx + \frac{\partial w_y}{\partial y} dy$$
+
+Solving for dy:
+
+$$dy = -\frac{\frac{\partial w_x}{\partial x}}{\frac{\partial w_y}{\partial y}} dx$$
+
+This shows that if dx increases, dy needs to decrease to maintain constant fitness. The exact relationship is:
+
+$$dy = -\frac{w_x}{w_y} dx$$
+
+Where $w_x$ and $w_y$ are the fitnesses for the single perturbations.
+
+\subsection{Question 7}
+
+For synergy and antagonism, we use the full equation from part 3:
+
+$$dw_{xy} = \frac{\partial w_x}{\partial x} dx + \frac{\partial w_y}{\partial y} dy + \epsilon_{xy} (y dx + x dy)$$
+
+To remain on lines of constant fitness, $$dw_{xy} = 0$$:
+
+$$0 = \frac{\partial w_x}{\partial x} dx + \frac{\partial w_y}{\partial y} dy + \epsilon_{xy} (y dx + x dy)$$
+
+Solving for dy:
+
+$$dy = -\frac{\frac{\partial w_x}{\partial x} + \epsilon_{xy}y}{\frac{\partial w_y}{\partial y} + \epsilon_{xy}x} dx$$
+
+For synergy ($\epsilon_{xy} < 0$):
+\begin{itemize}
+    \item - If dx increases, dy must decrease more than in the additive case.
+    \item - If dx decreases, dy must increase more than in the additive case.
+\end{itemize}
+
+For antagonism ($\epsilon_{xy} > 0$):
+\begin{itemize}
+    \item - If dx increases, dy must decrease less than in the additive case.
+    \item - If dx decreases, dy must increase less than in the additive case.
+\end{itemize}
+
+These results align with the trajectories in the figure: synergistic effects curve towards the origin, while antagonistic effects curve away from it.
+
+\subsection{Question 8}
+
+a) The covariance equation for the effect of genes X and Y:
+
+$$Cov(X,Y) = E_{xy} - E_x - E_y + E_0$$
+
+b) Additive effects would lead to $$Cov(X,Y) = 0$$:
+
+$$E_{xy} = E_x + E_y - E_0$$
+
+To modify for non-zero results, introduce an interaction term $\epsilon$:
+
+$$E_{xy} = E_x + E_y - E_0 + \epsilon$$
+
+c) Non-zero covariance interpretation:
+\begin{itemize}
+    \item - Positive covariance: synergistic effect (proteins enhance each other's effect)
+    \item - Negative covariance: antagonistic effect (proteins inhibit each other's effect)
+\end{itemize}
+
+The analysis from parts 1-7 can apply to this system:
+\begin{itemize}
+    \item - X and Y correspond to perturbations
+    \item - Expression levels correspond to fitness
+    \item - The covariance term represents the interaction between X and Y proteins
+\end{itemize}
+
+This framework allows us to analyze gene interactions similarly to how we analyzed perturbation interactions, providing insights into the regulatory dynamics of gene Z.
+
+I'll answer these questions, showing all relevant math steps.
+
+\subsection{Question 9}
+
+a) For random Erdős-Rényi graphs, the scaling of network motifs with N nodes:
+
+$$M \approx \binom{N}{n} p^g$$
+
+Where:
+- M is the number of motifs
+- n is the number of nodes in the motif
+- g is the number of edges in the motif
+- p is the probability of an edge existing between any two nodes
+
+Explanation: We choose n nodes from N in $\binom{N}{n}$ ways, and the probability of g specific edges existing is $p^g$.
+
+b) For geometric Itzkowitz-Alon graphs, the scaling is:
+
+$$M \approx N \cdot (\rho R^d)^{n-1}$$
+
+Where:
+- $\rho$ is the density of nodes
+- $R$ is the radius of influence
+- $d$ is the dimensionality of the space
+
+(c) For Itzkowitz-Alon graphs, the expected number of wedge motifs \[ \langle G_{\wedge} \rangle \] with a Gaussian connectivity function:
+
+\[
+\langle G_{\wedge} \rangle \approx N \cdot (2\pi R^2)^2 \cdot \exp\left(-\frac{r^2}{2R^2}\right)
+\]
+
+Where \( r \) is the distance between nodes.
+
+\subsection{Question 9.a}
+
+The variance in the number of wedge motifs, \[\text{Var}(G_{\wedge})\], can be calculated as:
+
+\[
+\text{Var}(G_{\wedge}) = \langle G_{\wedge}^2 \rangle - \langle G_{\wedge} \rangle^2
+\]
+
+Where:
+\[
+\langle G_{\wedge}^2 \rangle = \sum_{i,j,k} \sum_{l,m,n} P(i,j,k \text{ form a wedge}) \cdot P(l,m,n \text{ form a wedge})
+\]
+\[
+\langle G_{\wedge} \rangle = \sum_{i,j,k} P(i,j,k \text{ form a wedge})
+\]
+
+To compute numerically:
+\begin{enumerate}
+\item Generate many random graphs
+\item Count wedges in each graph
+\item Calculate mean and variance of wedge counts
+\end{enumerate}
+
+\subsection{Question 9.b}
+
+Given that \( \langle G_{\wedge} \rangle \) scales with \( N \), we can deduce:
+
+\[
+\langle G_{\wedge}^2 \rangle \geq \langle G_{\wedge} \rangle^2 \sim N^2
+\]
+
+Therefore, \(\text{Var}(G_{\wedge}) \geq 0\) and scales at least as \( N^2 \).
+
+Upper bound: \(\text{Var}(G_{\wedge}) \leq \langle G_{\wedge}^2 \rangle \sim N^3\) (if all possible wedges were independent)
+
+\subsection{Question 9.c}
+
+For geometric graphs with connectivity \( \langle k \rangle \) and radius \( R \):
+
+In the limit of large \( \langle k \rangle \): 
+\[
+\text{Var}(G_{\wedge}) \sim N \cdot \langle k \rangle^2
+\]
+
+In the limit of small \( R \):
+\[
+\text{Var}(G_{\wedge}) \sim N \cdot R^{2d}
+\]
+
+Where \( d \) is the dimensionality of the space.
+
+\subsection{Question 10.a}
+
+The variance relates to the covariance of two wedge motifs as:
+
+\[
+\text{Var}(G_{\wedge}) = \text{Cov}(G_{\wedge}, G_{\wedge})
+\]
+
+For the covariance of a wedge with a triangle motif:
+
+\[
+\text{Cov}(G_{\wedge}, G_{\Delta}) = \langle G_{\wedge} G_{\Delta} \rangle - \langle G_{\wedge} \rangle \langle G_{\Delta} \rangle
+\]
+
+Where:
+\[
+\langle G_{\wedge} G_{\Delta} \rangle = \sum_{i,j,k} \sum_{l,m,n} P(i,j,k \text{ form a wedge and } l,m,n \text{ form a triangle})
+\]
+
+\subsection{Question 10.b}
+
+For Erdős-Rényi graphs, \(\text{Cov}(G_{\wedge}, G_{\Delta})\) is expected to be non-zero and positive.
+
+Reasoning: The presence of a wedge increases the likelihood of a triangle in the same local area, as they share structural elements.
+
+\subsection{Question 10.c}
+
+For Itzkowitz-Alon geometric graphs, \(\text{Cov}(G_{\wedge}, G_{\Delta})\) is expected to be non-zero and positive.
+
+Reasoning: Spatial proximity that favors wedge formation also increases triangle likelihood.
+
+As \( R \) increases:
+\begin{itemize}
+\item \( \langle G_{\wedge} \rangle \) increases (more potential connections)
+\item \( \langle G_{\Delta} \rangle \) increases (more potential triangles)
+\end{itemize}
+
+This would likely increase the covariance, maintaining a positive sign.
+
+The value of the covariance would increase with \( R \), as more motifs of both types would form, increasing their correlation. The sign would remain positive due to the inherent spatial relationship between wedges and triangles in geometric graphs.
+
+
+\end{document}
